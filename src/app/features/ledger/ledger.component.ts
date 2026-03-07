@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -81,7 +81,8 @@ export class LedgerComponent implements OnInit {
     private sessionService: SessionService,
     private pdfService: PdfExportService,
     private snackBar: MatSnackBar,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone
   ) {}
 
   ngOnInit(): void {
@@ -109,14 +110,30 @@ export class LedgerComponent implements OnInit {
     this.isLoading = true;
     try {
       const session = this.sessionService.getSession();
-      if (session && session.role === 'customer') {
-        this.clients = await this.supabaseService.getCustomerClients(session.id);
+      // Render page immediately; load clients in background.
+      this.isLoading = false;
+      this.cdr.detectChanges();
+
+      if (!session || session.role !== 'customer') {
+        return;
+      }
+
+      const clientsPromise = this.supabaseService.getCustomerClients(session.id);
+      const timeoutPromise = new Promise<Client[]>((resolve) =>
+        setTimeout(() => resolve([]), 12000)
+      );
+
+      const loadedClients = await Promise.race([clientsPromise, timeoutPromise]);
+
+      this.ngZone.run(() => {
+        this.clients = [...(loadedClients || [])];
         // Keep selection empty until user explicitly chooses a client.
         this.selectedClient = null;
         this.selectedClientId = null;
         this.totals.openingBalance = 0;
         this.calculateClosingBalance();
-      }
+        this.cdr.detectChanges();
+      });
     } catch (error) {
       console.error('Error loading clients:', error);
       this.snackBar.open('Failed to load clients', 'Close', { duration: 3000 });
