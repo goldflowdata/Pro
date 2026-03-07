@@ -278,13 +278,12 @@ export class LedgerComponent implements OnInit {
 
       this.snackBar.open('Voucher saved successfully!', 'Close', { duration: 2000 });
 
-      // Generate and download PDF
-      this.pdfService.generateVoucherPdf(
-        String(savedVoucher.voucher_number),
-        this.selectedClient.name,
-        voucher.date,
+      // Generate and download legacy-format PDF (same as report reprint)
+      this.pdfService.generateVoucherReceiptFromDb(
+        savedVoucher,
         this.items,
-        this.totals
+        this.selectedClient.name,
+        session.username
       );
 
       // Reset form
