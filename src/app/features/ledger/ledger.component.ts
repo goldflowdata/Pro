@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -80,7 +80,8 @@ export class LedgerComponent implements OnInit {
     private supabaseService: SupabaseService,
     private sessionService: SessionService,
     private pdfService: PdfExportService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -121,6 +122,7 @@ export class LedgerComponent implements OnInit {
       this.snackBar.open('Failed to load clients', 'Close', { duration: 3000 });
     } finally {
       this.isLoading = false;
+      this.cdr.detectChanges();
     }
   }
 
@@ -276,6 +278,7 @@ export class LedgerComponent implements OnInit {
       this.snackBar.open('Failed to save voucher', 'Close', { duration: 3000 });
     } finally {
       this.isSaving = false;
+      this.cdr.detectChanges();
     }
   }
 
