@@ -1,0 +1,64 @@
+<div class="login-container">
+  <div class="login-content">
+    <!-- Logo & Branding -->
+    <div class="login-header">
+      <div class="logo">
+        <span class="logo-icon">💎</span>
+        <h1>GoldFlow Pro</h1>
+      </div>
+      <p class="tagline">Gold Ledger & Inventory Management System</p>
+    </div>
+
+    <!-- Login Form Card -->
+    <mat-card class="login-card">
+      <mat-card-content>
+        <form (ngSubmit)="login()" class="login-form">
+          <!-- Username Field -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Username</mat-label>
+            <input
+              matInput
+              [(ngModel)]="username"
+              name="username"
+              placeholder="Enter your username"
+              [disabled]="isLoading"
+              (keypress)="onKeyPress($event)"
+            />
+          </mat-form-field>
+
+          <!-- Password Field -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              [(ngModel)]="password"
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              [disabled]="isLoading"
+              (keypress)="onKeyPress($event)"
+            />
+          </mat-form-field>
+
+          <!-- Login Button -->
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="isLoading"
+            class="login-button"
+          >
+            <span *ngIf="!isLoading">Sign In</span>
+            <mat-spinner *ngIf="isLoading" diameter="20" color="accent"></mat-spinner>
+            <span *ngIf="isLoading" class="ml-2">Signing In...</span>
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Footer -->
+    <div class="login-footer">
+      <p>&copy; 2026 GoldFlow Pro. All rights reserved.</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,221 @@
+// Login Container - Full screen login page
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+  padding: 20px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+// Login Content - Center wrapper
+.login-content {
+  width: 100%;
+  max-width: 420px;
+  animation: slideInDown 0.5s ease-out;
+}
+
+// Login Header - Logo and title
+.login-header {
+  text-align: center;
+  margin-bottom: 40px;
+  color: white;
+
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 12px;
+
+    .logo-icon {
+      font-size: 48px;
+      animation: bounce 2s infinite;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .tagline {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.9;
+    letter-spacing: 0.5px;
+  }
+}
+
+// Login Card - Main form container
+.login-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+
+  mat-card-content {
+    padding: 32px;
+
+    @media (max-width: 480px) {
+      padding: 24px;
+    }
+  }
+}
+
+// Login Form - Form styling
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+// Full Width Form Fields
+.full-width {
+  width: 100%;
+
+  ::ng-deep {
+    .mat-mdc-form-field-container {
+      padding-bottom: 0;
+    }
+
+    .mat-mdc-form-field-label {
+      color: var(--primary-lighter);
+      font-weight: 600;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      padding-bottom: 0;
+    }
+
+    .mdc-text-field--outlined {
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: var(--gray-300);
+      }
+
+      &:hover {
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          border-color: var(--accent);
+        }
+      }
+    }
+
+    .mdc-text-field--focused {
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: var(--accent) !important;
+        border-width: 2px;
+      }
+    }
+  }
+
+}
+
+// Login Button - Submit button styling
+.login-button {
+  padding: 12px 24px;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+
+  &:hover:not(:disabled) {
+    box-shadow: 0 8px 20px rgba(30, 27, 75, 0.3);
+    transform: translateY(-2px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .ml-2 {
+    margin-left: 8px;
+  }
+}
+
+// Login Footer
+.login-footer {
+  text-align: center;
+  margin-top: 24px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+
+  p {
+    margin: 0;
+  }
+}
+
+// Animations
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+// Responsive Design
+@media (max-width: 480px) {
+  .login-header {
+    margin-bottom: 30px;
+
+    .logo h1 {
+      font-size: 28px;
+    }
+
+    .tagline {
+      font-size: 12px;
+    }
+  }
+
+  .login-card {
+    mat-card-content {
+      padding: 20px;
+    }
+  }
+
+  .login-form {
+    gap: 16px;
+  }
+
+  ::ng-deep .mat-mdc-form-field {
+    .mat-mdc-floating-label {
+      font-size: 12px;
+    }
+  }
+}

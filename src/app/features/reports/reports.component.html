@@ -1,0 +1,56 @@
+<div class="reports-container">
+  <div class="reports-header">
+    <h2>Transaction Report</h2>
+    <p>Filter vouchers by date and print receipts</p>
+  </div>
+
+  <mat-card class="filter-card">
+    <mat-card-content>
+      <div class="report-filters">
+        <div class="filter-col">
+          <label for="report-from">FROM</label>
+          <input id="report-from" type="date" [(ngModel)]="startDate" (keydown.enter)="loadReports()" />
+        </div>
+        <div class="filter-col">
+          <label for="report-to">TO</label>
+          <input id="report-to" type="date" [(ngModel)]="endDate" (keydown.enter)="loadReports()" />
+        </div>
+        <div class="filter-action">
+          <button class="primary-btn" (click)="loadReports()" (keydown.enter)="loadReports()" [disabled]="isLoading">
+            {{ isLoading ? 'Loading...' : 'Filter' }}
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="customer-list">
+    <mat-card *ngFor="let customer of reportCustomers" class="customer-card">
+      <mat-card-content>
+        <div class="customer-name">{{ customer.username || customer.name || 'Customer' }}</div>
+
+        <div class="client-list">
+          <div *ngFor="let client of customer.clients" class="client-entry">
+            <div class="client-name">{{ client.name }}</div>
+
+            <div *ngIf="!client.vouchers?.length" class="empty-client">No vouchers</div>
+
+            <div *ngFor="let voucher of client.vouchers" class="voucher-row">
+              <div class="voucher-label">{{ voucher.date }} - Voucher #{{ voucher.voucher_number }}</div>
+              <div class="amount">{{ voucher.closing_value | number: '1.0-3' }}</div>
+              <div class="report-print">
+                <button class="print-btn" (click)="printReceipt(voucher.id)" (keydown.enter)="printReceipt(voucher.id)" [disabled]="isPrinting">
+                  {{ isPrinting ? 'Printing...' : 'Print Receipt' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <mat-card *ngIf="!isLoading && reportCustomers.length === 0" class="empty-state">
+    <mat-card-content>No records for selected date range.</mat-card-content>
+  </mat-card>
+</div>

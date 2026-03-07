@@ -1,0 +1,47 @@
+<div class="master-container">
+  <mat-card *ngIf="!isUnlocked" class="unlock-card">
+    <mat-card-content>
+      <div class="lock-icon">LOCK</div>
+      <div class="title">MASTER PASSPHRASE</div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Passphrase</mat-label>
+        <input matInput type="password" [(ngModel)]="passphrase" (keydown.enter)="unlock()" />
+      </mat-form-field>
+
+      <button mat-raised-button class="unlock-btn" (click)="unlock()" (keydown.enter)="unlock()">
+        UNLOCK VAULT
+      </button>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card *ngIf="isUnlocked" class="clients-card">
+    <mat-card-content>
+      <div class="add-row">
+        <mat-form-field appearance="outline" class="name-field">
+          <mat-label>Client Name</mat-label>
+          <input matInput [(ngModel)]="newClientName" (keydown.enter)="addClient()" />
+        </mat-form-field>
+        <button mat-raised-button class="add-btn" (click)="addClient()" (keydown.enter)="addClient()" [disabled]="isSaving">
+          ADD
+        </button>
+      </div>
+
+      <div class="list" *ngIf="!isLoading; else loading">
+        <div class="row" *ngFor="let client of clients">
+          <div class="client-name">{{ client.name }}</div>
+          <div class="stock">{{ client.current_stock | number: '1.0-3' }} g</div>
+          <button mat-button class="delete-btn" (click)="deleteClient(client.id)" (keydown.enter)="deleteClient(client.id)" [disabled]="isSaving">
+            X
+          </button>
+        </div>
+      </div>
+
+      <ng-template #loading>
+        <div class="loading-wrap">
+          <mat-spinner diameter="28"></mat-spinner>
+        </div>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
+</div>

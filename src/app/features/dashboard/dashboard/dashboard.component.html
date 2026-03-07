@@ -1,0 +1,52 @@
+<!-- Header/Toolbar -->
+<mat-toolbar class="app-toolbar">
+  <div class="toolbar-content">
+    <div class="toolbar-left">
+      <div class="logo-section">
+        <span class="logo-icon">💎</span>
+        <h1 class="app-title">GoldFlow Pro</h1>
+      </div>
+      <span class="view-indicator">{{ currentView | titlecase }} View</span>
+    </div>
+
+    <div class="toolbar-right">
+      <span class="user-info">Welcome, <strong>{{ username }}</strong></span>
+      <button mat-button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </div>
+</mat-toolbar>
+
+<!-- Navigation Tabs -->
+<mat-tab-group
+  [selectedIndex]="selectedTabIndex"
+  (selectedIndexChange)="selectTab($event)"
+  class="nav-tabs"
+>
+  <mat-tab *ngIf="!isAdminView()">
+    <ng-template mat-tab-label>
+      <span class="tab-label">Ledger</span>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab *ngIf="!isAdminView()">
+    <ng-template mat-tab-label>
+      <span class="tab-label">Reports</span>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab *ngIf="!isAdminView()">
+    <ng-template mat-tab-label>
+      <span class="tab-label">Master</span>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab *ngIf="isAdminView()">
+    <ng-template mat-tab-label>
+      <span class="tab-label">Admin</span>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+
+<div class="tab-content">
+  <router-outlet></router-outlet>
+</div>

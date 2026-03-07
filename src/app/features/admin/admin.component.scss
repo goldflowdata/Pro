@@ -1,0 +1,134 @@
+.admin-container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h2 {
+  margin: 0 0 16px;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--primary, #1e1b4b);
+}
+
+.create-card,
+.users-card {
+  margin-bottom: 16px;
+}
+
+.create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.add-user-btn {
+  width: 100%;
+  height: 44px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-row {
+  display: grid;
+  grid-template-columns: 1fr 250px 150px;
+  gap: 10px;
+  align-items: center;
+}
+
+.username {
+  font-size: 30px;
+  font-weight: 700;
+  color: #111827;
+  word-break: break-word;
+}
+
+.expiry-input-wrap {
+  position: relative;
+}
+
+.expiry-input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #cbd5e1;
+  border-radius: 20px;
+  padding: 0 38px 0 12px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e1b4b;
+  background: #f8fafc;
+}
+
+.calendar-btn {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.calendar-suffix-btn {
+  color: #1e1b4b;
+}
+
+.calendar-svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  display: block;
+}
+
+.delete-btn {
+  width: 100%;
+  height: 40px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.loading-spinner {
+  display: block;
+  margin: 10px auto;
+}
+
+.empty-state {
+  text-align: center;
+  color: #64748b;
+  padding: 20px 0;
+}
+
+@media (max-width: 768px) {
+  h2 {
+    font-size: 28px;
+  }
+
+  .username {
+    font-size: 22px;
+  }
+
+  .expiry-input {
+    font-size: 18px;
+  }
+
+  .user-row {
+    grid-template-columns: 1fr;
+  }
+}

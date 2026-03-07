@@ -1,0 +1,104 @@
+<div class="admin-container">
+  <h2>Admin - User Management</h2>
+
+  <mat-card class="create-card">
+    <mat-card-content>
+      <form [formGroup]="customerForm" class="create-form" (ngSubmit)="createCustomer()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Expiry Date</mat-label>
+          <input
+            matInput
+            type="date"
+            formControlName="expiry"
+            #createExpiryInput
+            (keydown)="$event.preventDefault()"
+            (paste)="$event.preventDefault()"
+            (click)="openDatePicker($event)"
+            (focus)="openDatePicker($event)"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            class="calendar-suffix-btn"
+            (click)="openDatePickerForInput(createExpiryInput)"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="calendar-svg">
+              <path d="M7 2h2v2h6V2h2v2h3v18H4V4h3V2zm11 8H6v10h12V10zM6 8h12V6H6v2z"/>
+            </svg>
+          </button>
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!customerForm.valid || isCreating"
+          class="add-user-btn"
+        >
+          <span *ngIf="!isCreating">Add User</span>
+          <mat-spinner *ngIf="isCreating" diameter="20" color="accent"></mat-spinner>
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="users-card">
+    <mat-card-content>
+      <mat-spinner *ngIf="isLoading" diameter="40" class="loading-spinner"></mat-spinner>
+
+      <div *ngIf="!isLoading && customers.length === 0" class="empty-state">
+        No users found.
+      </div>
+
+      <div *ngIf="!isLoading && customers.length > 0" class="users-list">
+        <div *ngFor="let customer of customers" class="user-row">
+          <div class="username">{{ customer.username }}</div>
+
+          <div class="expiry-input-wrap">
+            <input
+              class="expiry-input"
+              type="date"
+              [(ngModel)]="customer.expiry"
+              #rowExpiryInput
+              (keydown)="$event.preventDefault()"
+              (paste)="$event.preventDefault()"
+              (click)="openDatePicker($event)"
+              (focus)="openDatePicker($event)"
+              (change)="updateExpiry(customer, customer.expiry || '')"
+            />
+                        <button
+              type="button"
+              class="calendar-btn"
+              (click)="openDatePickerForInput(rowExpiryInput)"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" class="calendar-svg">
+                <path d="M7 2h2v2h6V2h2v2h3v18H4V4h3V2zm11 8H6v10h12V10zM6 8h12V6H6v2z"/>
+              </svg>
+            </button>
+          </div>
+
+          <button
+            mat-raised-button
+            color="warn"
+            (click)="deleteCustomer(customer)"
+            class="delete-btn"
+          >
+            X
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

@@ -1,0 +1,366 @@
+<div class="ledger-container">
+  <!-- Loading State -->
+  <mat-spinner *ngIf="isLoading" diameter="40" class="loading-spinner"></mat-spinner>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading" class="ledger-content">
+    <!-- Header -->
+    <div class="ledger-header">
+      <h2>
+        <span>•</span>
+        Create Gold Voucher
+      </h2>
+      <p class="subtitle">Enter transaction details and items</p>
+    </div>
+
+    <!-- Client Selector -->
+    <mat-card class="client-card" *ngIf="clients.length > 0">
+      <mat-card-header>
+        <mat-card-title-group>
+          <span class="section-icon">•</span>
+          <mat-card-title>Select Client Account</mat-card-title>
+        </mat-card-title-group>
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-form-field appearance="outline" class="form-control">
+          <mat-label>Client</mat-label>
+          <mat-select
+            [value]="selectedClientId"
+            (selectionChange)="onClientSelection($event.value)"
+          >
+            <mat-option [value]="null">Select client</mat-option>
+            <mat-option *ngFor="let client of clients" [value]="client.id">
+              {{ client.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card *ngIf="!selectedClient" class="empty-state">
+      <mat-card-content>
+        <span class="empty-icon">•</span>
+        <p>No clients available. Please create a client account first.</p>
+      </mat-card-content>
+    </mat-card>
+
+    <div *ngIf="selectedClient" [formGroup]="voucherForm">
+      <!-- Voucher Info -->
+      <mat-card class="voucher-info-card">
+        <mat-card-header>
+          <span class="section-icon">•</span>
+          <mat-card-title>Voucher Information</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-control">
+              <mat-label>Transaction Date</mat-label>
+              <input
+                matInput
+                type="date"
+                formControlName="date"
+              />
+              <span matSuffix class="calendar-suffix">📅</span>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Item Entry -->
+      <mat-card class="item-entry-card">
+        <mat-card-header>
+          <span class="section-icon">•</span>
+          <mat-card-title>Add Item</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form [formGroup]="voucherForm" class="item-form" autocomplete="off">
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-control">
+                <mat-label>Description</mat-label>
+                <input
+                  matInput
+                  formControlName="description"
+                  placeholder="e.g., Gold Biscuit, Gold Ring"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-control">
+                <mat-label>Stamp/Purity</mat-label>
+                <input
+                  matInput
+                  formControlName="stamp"
+                  placeholder="e.g., 22K, 24K"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-control">
+                <mat-label>Gross Weight (g)</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  step="0.001"
+                  formControlName="gross"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-control">
+                <mat-label>Less/Deduction (g)</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  step="0.001"
+                  formControlName="less"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-control">
+                <mat-label>Tunch %</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  step="0.1"
+                  formControlName="tunch"
+                  min="0"
+                  max="100"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-control">
+                <mat-label>Wastage %</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  step="0.1"
+                  formControlName="wastage"
+                  min="0"
+                  max="100"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-control">
+                <mat-label>Pieces</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  step="1"
+                  formControlName="pieces"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+
+              <button
+                mat-raised-button
+                color="accent"
+                type="button"
+                (click)="addItem()"
+                (keydown.enter)="addItem()"
+                [disabled]="isSaving"
+                class="add-button"
+              >
+                Add Item
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Items Table -->
+      <mat-card *ngIf="items.length > 0" class="items-table-card">
+        <mat-card-header>
+          <span class="section-icon">•</span>
+          <mat-card-title>Items ({{ items.length }})</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="table-wrapper">
+            <table mat-table [dataSource]="items" class="items-table">
+              <!-- Description Column -->
+              <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef>Description</th>
+                <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+              </ng-container>
+
+              <!-- Stamp Column -->
+              <ng-container matColumnDef="stamp">
+                <th mat-header-cell *matHeaderCellDef>Stamp</th>
+                <td mat-cell *matCellDef="let element">{{ element.stamp }}</td>
+              </ng-container>
+
+              <!-- Gross Weight Column -->
+              <ng-container matColumnDef="gross">
+                <th mat-header-cell *matHeaderCellDef>Gross (g)</th>
+                <td mat-cell *matCellDef="let element">{{ element.gross | number: '1.3-3' }}</td>
+              </ng-container>
+
+              <!-- Less Column -->
+              <ng-container matColumnDef="less">
+                <th mat-header-cell *matHeaderCellDef>Less (g)</th>
+                <td mat-cell *matCellDef="let element">{{ element.less | number: '1.3-3' }}</td>
+              </ng-container>
+
+              <!-- Tunch Column -->
+              <ng-container matColumnDef="tunch">
+                <th mat-header-cell *matHeaderCellDef>Tunch %</th>
+                <td mat-cell *matCellDef="let element">{{ element.tunch | number: '1.1-2' }}</td>
+              </ng-container>
+
+              <!-- Wastage Column -->
+              <ng-container matColumnDef="wastage">
+                <th mat-header-cell *matHeaderCellDef>Wastage %</th>
+                <td mat-cell *matCellDef="let element">{{ element.wastage | number: '1.1-2' }}</td>
+              </ng-container>
+
+              <!-- Pieces Column -->
+              <ng-container matColumnDef="pieces">
+                <th mat-header-cell *matHeaderCellDef>Pieces</th>
+                <td mat-cell *matCellDef="let element">{{ element.pieces }}</td>
+              </ng-container>
+
+              <!-- Final Weight Column -->
+              <ng-container matColumnDef="finalWeight">
+                <th mat-header-cell *matHeaderCellDef>Fine Weight (g)</th>
+                <td mat-cell *matCellDef="let element">{{ element.finalWeight | number: '1.3-3' }}</td>
+              </ng-container>
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Action</th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="removeItem(i)"
+                    (keydown.enter)="removeItem(i)"
+                    matTooltip="Remove item"
+                  >
+                    X
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="data-row"></tr>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Makeup Payment (MP) Section -->
+      <mat-card class="mp-card">
+        <mat-card-header>
+          <span class="section-icon">•</span>
+          <mat-card-title>Makeup Payment (MP) Deduction</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-control">
+              <mat-label>MP Gross Weight (g)</mat-label>
+              <input
+                matInput
+                type="number"
+                step="0.001"
+                formControlName="mpGross"
+                (change)="updateMPValues()"
+                autocomplete="off"
+              />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-control">
+              <mat-label>MP Tunch %</mat-label>
+              <input
+                matInput
+                type="number"
+                step="0.1"
+                formControlName="mpTunch"
+                min="0"
+                max="100"
+                (change)="updateMPValues()"
+                autocomplete="off"
+              />
+            </mat-form-field>
+
+            <div class="mp-display">
+              <div class="mp-value">
+                <span class="label">MP Fine:</span>
+                <span class="value">{{ totals.mpFine | number: '1.3-3' }}g</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Summary Section -->
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <span class="section-icon">•</span>
+          <mat-card-title>Transaction Summary</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="summary-grid">
+            <div class="summary-item">
+              <span class="label">Fine Weight:</span>
+              <span class="value">{{ totals.fineWeight | number: '1.3-3' }} g</span>
+            </div>
+            <div class="summary-item">
+              <span class="label">Gross Weight:</span>
+              <span class="value">{{ totals.grossWeight | number: '1.3-3' }} g</span>
+            </div>
+            <div class="summary-item">
+              <span class="label">Net Weight:</span>
+              <span class="value">{{ totals.netWeight | number: '1.3-3' }} g</span>
+            </div>
+          </div>
+
+          <mat-divider class="divider"></mat-divider>
+
+          <div class="balance-section">
+            <div class="balance-item">
+              <span class="label">Opening Balance:</span>
+              <span class="value opening">{{ totals.openingBalance | number: '1.3-3' }} g</span>
+            </div>
+            <div class="balance-item">
+              <span class="label">Fine Weight Added:</span>
+              <span class="value plus">+ {{ totals.fineWeight | number: '1.3-3' }} g</span>
+            </div>
+            <div class="balance-item">
+              <span class="label">MP Fine Deducted:</span>
+              <span class="value minus">- {{ totals.mpFine | number: '1.3-3' }} g</span>
+            </div>
+            <div class="balance-item closing">
+              <span class="label">Closing Balance:</span>
+              <span class="value">{{ totals.closingBalance | number: '1.3-3' }} g</span>
+            </div>
+          </div>
+
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="saveVoucher()"
+            (keydown.enter)="saveVoucher()"
+            [disabled]="!selectedClient || items.length === 0 || isSaving"
+            class="save-button"
+          >
+            <span *ngIf="!isSaving">Save Voucher & Generate PDF</span>
+            <mat-spinner *ngIf="isSaving" diameter="20" color="accent"></mat-spinner>
+            <span *ngIf="isSaving" class="ml-2">Saving...</span>
+          </button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
