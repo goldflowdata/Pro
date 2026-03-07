@@ -141,12 +141,8 @@
         }
 
         &.mat-mdc-tab-active {
-          .mat-mdc-tab-labels-content {
-            color: var(--primary);
-          }
-
-          .mdc-tab__content {
-            color: var(--primary);
+          .mdc-tab__text-label {
+            color: var(--primary) !important;
           }
 
           .mdc-tab-indicator__content {
@@ -154,17 +150,11 @@
           }
         }
 
-        .mat-mdc-tab-labels-content {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-weight: 600;
-          color: var(--gray-600);
-          transition: all 0.2s ease;
-
-          &:hover {
-            color: var(--primary);
-          }
+        .mdc-tab__text-label {
+          color: #334155 !important;
+          font-weight: 700;
+          opacity: 1 !important;
+          transition: color 0.2s ease;
         }
 
         .tab-label {
@@ -202,6 +192,26 @@
 
     @media (max-width: 480px) {
       padding: 12px;
+    }
+  }
+}
+
+@media (max-width: 520px) {
+  .nav-tabs {
+    ::ng-deep .mat-mdc-tab-labels {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    ::ng-deep .mat-mdc-tab-labels .mat-mdc-tab {
+      min-width: 88px;
+      padding: 0 8px;
+      height: 52px;
+    }
+
+    ::ng-deep .mat-mdc-tab-labels .mat-mdc-tab .mdc-tab__text-label {
+      font-size: 12px;
+      color: #1f2937 !important;
     }
   }
 }
