@@ -164,7 +164,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       });
     } catch (error) {
       console.error('Error loading clients:', error);
-      this.snackBar.open('Failed to load clients', 'Close', { duration: 3000 });
+      this.snackBar.open('Failed to load clients', 'Close', { duration: 3000, verticalPosition: 'bottom' });
     } finally {
       this.isLoading = false;
       this.cdr.detectChanges();
@@ -235,13 +235,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
     this.calculateCurrentItemFineWeight();
 
-    this.snackBar.open('Item added successfully', 'Close', { duration: 2000 });
+    this.snackBar.open('Item added successfully', 'Close', { duration: 2000, verticalPosition: 'bottom' });
   }
 
   removeItem(index: number): void {
     this.items.splice(index, 1);
     this.calculateTotals();
-    this.snackBar.open('Item removed', 'Close', { duration: 2000 });
+    this.snackBar.open('Item removed', 'Close', { duration: 2000, verticalPosition: 'bottom' });
   }
 
   private calculateTotals(): void {
@@ -299,17 +299,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   async saveVoucher(): Promise<void> {
     if (!this.selectedClient) {
-      this.snackBar.open('Please select a client', 'Close', { duration: 3000 });
+      this.snackBar.open('Please select a client', 'Close', { duration: 3000, verticalPosition: 'bottom' });
       return;
     }
 
     if (this.selectedClient.id === this.demoClientId) {
-      this.snackBar.open('Demo account is for display only. Please create a real client in Master.', 'Close', { duration: 3500 });
+      this.snackBar.open('Demo account is for display only. Please create a real client in Master.', 'Close', { duration: 3500, verticalPosition: 'bottom' });
       return;
     }
 
     if (this.items.length === 0) {
-      this.snackBar.open('Please add at least one item', 'Close', { duration: 3000 });
+      this.snackBar.open('Please add at least one item', 'Close', { duration: 3000, verticalPosition: 'bottom' });
       return;
     }
 
@@ -340,7 +340,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         voucher
       );
 
-      this.snackBar.open('Voucher saved successfully!', 'Close', { duration: 2000 });
+      this.snackBar.open('Voucher saved successfully!', 'Close', { duration: 2000, verticalPosition: 'bottom' });
 
       // Generate and download legacy-format PDF (same as report reprint)
       this.pdfService.generateVoucherReceiptFromDb(
@@ -355,7 +355,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       this.loadClients();
     } catch (error) {
       console.error('Error saving voucher:', error);
-      this.snackBar.open('Failed to save voucher', 'Close', { duration: 3000 });
+      this.snackBar.open('Failed to save voucher', 'Close', { duration: 3000, verticalPosition: 'bottom' });
     } finally {
       this.isSaving = false;
       this.cdr.detectChanges();
@@ -392,3 +392,4 @@ export class LedgerComponent implements OnInit, OnDestroy {
     };
   }
 }
+

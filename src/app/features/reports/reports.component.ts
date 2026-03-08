@@ -67,7 +67,7 @@ export class ReportsComponent implements OnInit {
   async loadReports(): Promise<void> {
     const requestId = ++this.activeLoadRequest;
     if (!this.startDate || !this.endDate) {
-      this.snackBar.open('Please select both start and end dates', 'Close', { duration: 3000 });
+      this.snackBar.open('Please select both start and end dates', 'Close', { duration: 3000, verticalPosition: 'bottom' });
       return;
     }
 
@@ -86,11 +86,11 @@ export class ReportsComponent implements OnInit {
       );
 
       if (this.reportCustomers.length === 0) {
-        this.snackBar.open('No records found for the selected date range', 'Close', { duration: 3000 });
+        this.snackBar.open('No records found for the selected date range', 'Close', { duration: 3000, verticalPosition: 'bottom' });
       }
     } catch (error) {
       console.error('Error loading reports:', error);
-      this.snackBar.open('Failed to load reports', 'Close', { duration: 3000 });
+      this.snackBar.open('Failed to load reports', 'Close', { duration: 3000, verticalPosition: 'bottom' });
     } finally {
       if (requestId === this.activeLoadRequest) {
         this.isLoading = false;
@@ -101,7 +101,7 @@ export class ReportsComponent implements OnInit {
 
   async printReceipt(voucherId: string): Promise<void> {
     if (!voucherId) {
-      this.snackBar.open('Voucher id missing', 'Close', { duration: 3000 });
+      this.snackBar.open('Voucher id missing', 'Close', { duration: 3000, verticalPosition: 'bottom' });
       return;
     }
 
@@ -118,13 +118,14 @@ export class ReportsComponent implements OnInit {
         payload.clientName,
         payload.customerName
       );
-      this.snackBar.open('Receipt printed successfully', 'Close', { duration: 2000 });
+      this.snackBar.open('Receipt printed successfully', 'Close', { duration: 2000, verticalPosition: 'bottom' });
     } catch (error) {
       console.error('Error printing receipt:', error);
-      this.snackBar.open('Failed to print receipt', 'Close', { duration: 3000 });
+      this.snackBar.open('Failed to print receipt', 'Close', { duration: 3000, verticalPosition: 'bottom' });
     } finally {
       this.isPrinting = false;
       this.cdr.detectChanges();
     }
   }
 }
+

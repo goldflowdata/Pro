@@ -98,6 +98,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.sessionService.logout();
-    this.snackBar.open('Logged out successfully', 'Close', { duration: 2000 });
+    this.snackBar.open('Logged out successfully', 'Close', { duration: 2000, verticalPosition: 'bottom' });
   }
 }
+

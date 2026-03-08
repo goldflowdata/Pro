@@ -45,13 +45,13 @@ export class MasterComponent implements OnInit {
   ngOnInit(): void {
     const session = this.sessionService.getSession();
     if (!session || session.role !== 'customer') {
-      this.snackBar.open('Master is available only for customer accounts.', 'Close', { duration: 2500 });
+      this.snackBar.open('Master is available only for customer accounts.', 'Close', { duration: 2500, verticalPosition: 'bottom' });
     }
   }
 
   async unlock(): Promise<void> {
     if (this.passphrase !== this.masterPassphrase) {
-      this.snackBar.open('Invalid master passphrase', 'Close', { duration: 2500 });
+      this.snackBar.open('Invalid master passphrase', 'Close', { duration: 2500, verticalPosition: 'bottom' });
       return;
     }
 
@@ -82,7 +82,7 @@ export class MasterComponent implements OnInit {
       this.clients = await this.supabaseService.getCustomerClients(session.id);
     } catch (error) {
       console.error('Failed to load clients:', error);
-      this.snackBar.open('Failed to load clients', 'Close', { duration: 2500 });
+      this.snackBar.open('Failed to load clients', 'Close', { duration: 2500, verticalPosition: 'bottom' });
     } finally {
       this.isLoading = false;
       this.cdr.detectChanges();
@@ -97,13 +97,13 @@ export class MasterComponent implements OnInit {
     }
 
     if (!name) {
-      this.snackBar.open('Enter client name', 'Close', { duration: 2500 });
+      this.snackBar.open('Enter client name', 'Close', { duration: 2500, verticalPosition: 'bottom' });
       return;
     }
 
     const duplicate = this.clients.some((client) => client.name.trim().toLowerCase() === name.toLowerCase());
     if (duplicate) {
-      this.snackBar.open('Client already exists', 'Close', { duration: 2500 });
+      this.snackBar.open('Client already exists', 'Close', { duration: 2500, verticalPosition: 'bottom' });
       return;
     }
 
@@ -116,10 +116,10 @@ export class MasterComponent implements OnInit {
       });
       this.newClientName = '';
       await this.loadClients();
-      this.snackBar.open('Client added', 'Close', { duration: 2000 });
+      this.snackBar.open('Client added', 'Close', { duration: 2000, verticalPosition: 'bottom' });
     } catch (error) {
       console.error('Failed to add client:', error);
-      this.snackBar.open('Failed to add client', 'Close', { duration: 2500 });
+      this.snackBar.open('Failed to add client', 'Close', { duration: 2500, verticalPosition: 'bottom' });
     } finally {
       this.isSaving = false;
       this.cdr.detectChanges();
@@ -135,13 +135,14 @@ export class MasterComponent implements OnInit {
     try {
       await this.supabaseService.deleteCustomerClient(clientId);
       await this.loadClients();
-      this.snackBar.open('Client deleted', 'Close', { duration: 2000 });
+      this.snackBar.open('Client deleted', 'Close', { duration: 2000, verticalPosition: 'bottom' });
     } catch (error) {
       console.error('Failed to delete client:', error);
-      this.snackBar.open('Failed to delete client', 'Close', { duration: 2500 });
+      this.snackBar.open('Failed to delete client', 'Close', { duration: 2500, verticalPosition: 'bottom' });
     } finally {
       this.isSaving = false;
       this.cdr.detectChanges();
     }
   }
 }
+

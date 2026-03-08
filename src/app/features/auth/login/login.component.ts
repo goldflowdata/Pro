@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
 
   async login(): Promise<void> {
     if (!this.username || !this.password) {
-      this.snackBar.open('Please enter username and password', 'Close', { duration: 3000 });
+      this.snackBar.open('Please enter username and password', 'Close', { duration: 3000, verticalPosition: 'bottom' });
       return;
     }
 
@@ -61,15 +61,15 @@ export class LoginComponent implements OnInit {
       const user = await this.supabaseService.login(this.username, this.password);
       if (user) {
         this.sessionService.saveSession(user);
-        this.snackBar.open(`Welcome, ${user.username}!`, 'Close', { duration: 2000 });
+        this.snackBar.open(`Welcome back, ${user.username}.`, 'Dismiss', { duration: 2200, verticalPosition: 'bottom' });
         this.redirectToDashboard();
       } else {
-        this.snackBar.open('Invalid username or password', 'Close', { duration: 3000 });
+        this.snackBar.open('Invalid username or password', 'Close', { duration: 3000, verticalPosition: 'bottom' });
       }
     } catch (error: any) {
       console.error('Login error:', error);
       const message = error?.message || 'Login failed. Please try again.';
-      this.snackBar.open(message, 'Close', { duration: 3000 });
+      this.snackBar.open(message, 'Close', { duration: 3000, verticalPosition: 'bottom' });
     } finally {
       this.isLoading = false;
       this.cdr.detectChanges();
@@ -95,3 +95,4 @@ export class LoginComponent implements OnInit {
     }
   }
 }
+

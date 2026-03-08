@@ -79,7 +79,7 @@ export class AdminComponent implements OnInit {
       this.customers = await this.supabaseService.getCustomers();
     } catch (error) {
       console.error('Error loading customers:', error);
-      this.snackBar.open('Failed to load customers', 'Close', { duration: 3000 });
+      this.snackBar.open('Failed to load customers', 'Close', { duration: 3000, verticalPosition: 'bottom' });
     } finally {
       this.isLoading = false;
       this.cdr.detectChanges();
@@ -88,7 +88,7 @@ export class AdminComponent implements OnInit {
 
   async createCustomer(): Promise<void> {
     if (!this.customerForm.valid) {
-      this.snackBar.open('Please fill all fields correctly', 'Close', { duration: 3000 });
+      this.snackBar.open('Please fill all fields correctly', 'Close', { duration: 3000, verticalPosition: 'bottom' });
       return;
     }
 
@@ -103,10 +103,10 @@ export class AdminComponent implements OnInit {
 
       this.customerForm.reset();
       await this.loadCustomers();
-      this.snackBar.open('Customer created successfully', 'Close', { duration: 2000 });
+      this.snackBar.open('Customer created successfully', 'Close', { duration: 2000, verticalPosition: 'bottom' });
     } catch (error) {
       console.error('Error creating customer:', error);
-      this.snackBar.open('Failed to create customer', 'Close', { duration: 3000 });
+      this.snackBar.open('Failed to create customer', 'Close', { duration: 3000, verticalPosition: 'bottom' });
     } finally {
       this.isCreating = false;
     }
@@ -116,10 +116,10 @@ export class AdminComponent implements OnInit {
     try {
       await this.supabaseService.updateCustomerExpiry(customer.id, newExpiry);
       customer.expiry = newExpiry;
-      this.snackBar.open('Expiry date updated', 'Close', { duration: 2000 });
+      this.snackBar.open('Expiry date updated', 'Close', { duration: 2000, verticalPosition: 'bottom' });
     } catch (error) {
       console.error('Error updating expiry:', error);
-      this.snackBar.open('Failed to update expiry date', 'Close', { duration: 3000 });
+      this.snackBar.open('Failed to update expiry date', 'Close', { duration: 3000, verticalPosition: 'bottom' });
     }
   }
 
@@ -130,10 +130,10 @@ export class AdminComponent implements OnInit {
     try {
       await this.supabaseService.deleteCustomer(customer.id);
       await this.loadCustomers();
-      this.snackBar.open('Customer deleted successfully', 'Close', { duration: 2000 });
+      this.snackBar.open('Customer deleted successfully', 'Close', { duration: 2000, verticalPosition: 'bottom' });
     } catch (error) {
       console.error('Error deleting customer:', error);
-      this.snackBar.open('Failed to delete customer', 'Close', { duration: 3000 });
+      this.snackBar.open('Failed to delete customer', 'Close', { duration: 3000, verticalPosition: 'bottom' });
     }
   }
 
@@ -167,3 +167,4 @@ export class AdminComponent implements OnInit {
     input.focus();
   }
 }
+

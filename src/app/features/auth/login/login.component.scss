@@ -130,6 +130,12 @@
   display: block;
 }
 
+// Hide browser-native password reveal icon so only custom eye toggle is shown.
+input[type='password']::-ms-reveal,
+input[type='password']::-ms-clear {
+  display: none;
+}
+
 // Login Button - Submit button styling
 .login-button {
   padding: 12px 24px;

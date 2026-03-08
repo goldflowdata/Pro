@@ -374,3 +374,33 @@ button {
     padding: 12px 16px;
   }
 }
+
+// ============================================================================
+// SNACKBAR STYLING
+// ============================================================================
+
+.mat-mdc-snack-bar-container {
+  margin-bottom: 12px !important;
+
+  .mdc-snackbar__surface {
+    background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%) !important;
+    border: 1px solid #dbe3ef;
+    border-left: 4px solid #1e1b4b;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.18);
+    padding: 6px 10px;
+  }
+
+  .mdc-snackbar__label {
+    color: #0f1f57 !important;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  .mdc-button__label {
+    color: #d97706 !important;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+}
