@@ -14,7 +14,7 @@
     </div>
 
     <!-- Client Selector -->
-    <mat-card class="client-card" *ngIf="clients.length > 0">
+    <mat-card class="client-card">
       <mat-card-header>
         <mat-card-title-group>
           <span class="section-icon">•</span>
@@ -30,7 +30,7 @@
             (selectionChange)="onClientSelection($event.value)"
           >
             <mat-option [value]="null">Select client</mat-option>
-            <mat-option *ngFor="let client of clients" [value]="client.id">
+            <mat-option *ngFor="let client of availableClients" [value]="client.id">
               {{ client.name }}
             </mat-option>
           </mat-select>

@@ -57,6 +57,12 @@ interface CalculatedTotals {
   styleUrls: ['./ledger.component.scss']
 })
 export class LedgerComponent implements OnInit, OnDestroy {
+  private readonly demoClientId = 'demo-client';
+  private readonly demoClient: Client = {
+    id: this.demoClientId,
+    name: 'DEMO ACCOUNT',
+    current_stock: 0
+  };
   clients: Client[] = [];
   selectedClient: Client | null = null;
   selectedClientId: string | null = null;
@@ -77,6 +83,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
   isSaving = false;
   displayedColumns = ['description', 'stamp', 'gross', 'less', 'tunch', 'wastage', 'pieces', 'finalWeight', 'actions'];
   private formChangesSub?: Subscription;
+
+  get availableClients(): Client[] {
+    return [this.demoClient, ...this.clients];
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -169,7 +179,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   onClientSelection(clientId: string): void {
-    const client = this.clients.find(c => c.id === clientId);
+    if (!clientId) {
+      this.selectedClient = null;
+      this.selectedClientId = null;
+      this.totals.openingBalance = 0;
+      this.calculateClosingBalance();
+      return;
+    }
+
+    const client = this.availableClients.find(c => c.id === clientId);
     if (client) {
       this.selectClientOption(client);
     }
@@ -272,6 +290,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
   async saveVoucher(): Promise<void> {
     if (!this.selectedClient) {
       this.snackBar.open('Please select a client', 'Close', { duration: 3000 });
+      return;
+    }
+
+    if (this.selectedClient.id === this.demoClientId) {
+      this.snackBar.open('Demo account is for display only. Please create a real client in Master.', 'Close', { duration: 3500 });
       return;
     }
 
