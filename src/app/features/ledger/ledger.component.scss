@@ -212,6 +212,8 @@ mat-card {
 
     .mat-mdc-text-field-wrapper {
       padding-bottom: 0;
+      border-radius: 8px;
+      box-shadow: inset 4px 0 0 0 var(--accent);
     }
 
     .mdc-text-field--outlined {
