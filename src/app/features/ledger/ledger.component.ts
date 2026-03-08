@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -18,6 +18,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { SupabaseService, Client, VoucherItem } from '../../core/services/supabase.service';
 import { SessionService } from '../../core/services/session.service';
 import { PdfExportService } from '../../core/services/pdf-export.service';
+import { Subscription } from 'rxjs';
 
 interface CalculatedTotals {
   fineWeight: number;
@@ -55,12 +56,13 @@ interface CalculatedTotals {
   templateUrl: './ledger.component.html',
   styleUrls: ['./ledger.component.scss']
 })
-export class LedgerComponent implements OnInit {
+export class LedgerComponent implements OnInit, OnDestroy {
   clients: Client[] = [];
   selectedClient: Client | null = null;
   selectedClientId: string | null = null;
   voucherForm!: FormGroup;
   items: VoucherItem[] = [];
+  currentItemFineWeight = 0;
   totals: CalculatedTotals = {
     fineWeight: 0,
     grossWeight: 0,
@@ -74,6 +76,7 @@ export class LedgerComponent implements OnInit {
   isLoading = false;
   isSaving = false;
   displayedColumns = ['description', 'stamp', 'gross', 'less', 'tunch', 'wastage', 'pieces', 'finalWeight', 'actions'];
+  private formChangesSub?: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -87,7 +90,12 @@ export class LedgerComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
+    this.setupLiveCalculations();
     this.loadClients();
+  }
+
+  ngOnDestroy(): void {
+    this.formChangesSub?.unsubscribe();
   }
 
   private initializeForm(): void {
@@ -104,6 +112,16 @@ export class LedgerComponent implements OnInit {
       mpTunch: [100],
       mpFine: ['']
     });
+  }
+
+  private setupLiveCalculations(): void {
+    this.formChangesSub = this.voucherForm.valueChanges.subscribe(() => {
+      this.calculateCurrentItemFineWeight();
+      this.calculateMakeupPayment();
+      this.cdr.detectChanges();
+    });
+    this.calculateCurrentItemFineWeight();
+    this.calculateMakeupPayment();
   }
 
   private async loadClients(): Promise<void> {
@@ -161,10 +179,9 @@ export class LedgerComponent implements OnInit {
     const formValue = this.voucherForm.getRawValue();
     const gross = parseFloat(formValue.gross) || 0;
     const less = parseFloat(formValue.less) || 0;
-    const net = gross - less;
     const tunch = parseFloat(formValue.tunch) || 0;
     const wastage = parseFloat(formValue.wastage) || 0;
-    const finalWeight = net * (100 - tunch) / 100 * (100 - wastage) / 100;
+    const finalWeight = this.calculateFineWeight(gross, less, tunch, wastage);
 
     const item: VoucherItem = {
       description: formValue.description,
@@ -188,6 +205,7 @@ export class LedgerComponent implements OnInit {
       wastage: 0,
       pieces: 1
     });
+    this.calculateCurrentItemFineWeight();
 
     this.snackBar.open('Item added successfully', 'Close', { duration: 2000 });
   }
@@ -218,13 +236,26 @@ export class LedgerComponent implements OnInit {
 
   private calculateMakeupPayment(): void {
     const mpGross = parseFloat(this.voucherForm.get('mpGross')?.value) || 0;
-    const mpTunch = parseFloat(this.voucherForm.get('mpTunch')?.value) || 0;
+    const mpTunch = parseFloat(this.voucherForm.get('mpTunch')?.value) || 100;
 
     this.totals.mpGross = mpGross;
     this.totals.mpTunch = mpTunch;
-    this.totals.mpFine = mpGross * (100 - mpTunch) / 100;
+    this.totals.mpFine = mpGross * (mpTunch / 100);
 
     this.calculateClosingBalance();
+  }
+
+  private calculateCurrentItemFineWeight(): void {
+    const gross = parseFloat(this.voucherForm.get('gross')?.value) || 0;
+    const less = parseFloat(this.voucherForm.get('less')?.value) || 0;
+    const tunch = parseFloat(this.voucherForm.get('tunch')?.value) || 0;
+    const wastage = parseFloat(this.voucherForm.get('wastage')?.value) || 0;
+    this.currentItemFineWeight = this.calculateFineWeight(gross, less, tunch, wastage);
+  }
+
+  private calculateFineWeight(gross: number, less: number, tunch: number, wastage: number): number {
+    // Legacy index.html formula: (gross - less) * ((tunch + wastage) / 100)
+    return (gross - less) * ((tunch + wastage) / 100);
   }
 
   private calculateClosingBalance(): void {
@@ -315,6 +346,7 @@ export class LedgerComponent implements OnInit {
     });
     this.selectedClient = null;
     this.selectedClientId = null;
+    this.currentItemFineWeight = 0;
     this.totals = {
       fineWeight: 0,
       grossWeight: 0,

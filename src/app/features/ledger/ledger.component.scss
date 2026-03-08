@@ -254,6 +254,28 @@ mat-card {
   gap: 16px;
 }
 
+.live-fine-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1f1b5b;
+  color: #fff;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 700;
+
+  .label {
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+  }
+
+  .value {
+    font-family: monospace;
+    font-size: 1.05rem;
+  }
+}
+
 .add-button {
   align-self: stretch;
   justify-self: stretch;
