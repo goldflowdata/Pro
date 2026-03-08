@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -38,7 +38,8 @@ export class LoginComponent implements OnInit {
     private supabaseService: SupabaseService,
     private sessionService: SessionService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -71,6 +72,7 @@ export class LoginComponent implements OnInit {
       this.snackBar.open(message, 'Close', { duration: 3000 });
     } finally {
       this.isLoading = false;
+      this.cdr.detectChanges();
     }
   }
 
