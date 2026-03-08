@@ -11,14 +11,6 @@ mat-card {
 }
 
 .unlock-card {
-  .lock-icon {
-    text-align: center;
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: #1f1b5b;
-    margin: 8px 0 12px;
-  }
-
   .title {
     text-align: center;
     font-size: 0.9rem;
@@ -48,6 +40,32 @@ mat-card {
 }
 
 .clients-card {
+  .master-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .master-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #0f1f57;
+    letter-spacing: 0.02em;
+  }
+
+  .lock-btn {
+    min-width: 140px;
+    height: 42px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    color: #fff !important;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    box-shadow: 0 6px 14px rgba(220, 38, 38, 0.25);
+  }
+
   .add-row {
     display: grid;
     grid-template-columns: 1fr 160px;
@@ -121,6 +139,15 @@ mat-card {
 
   .clients-card .add-row {
     grid-template-columns: 1fr;
+  }
+
+  .clients-card .master-topbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .clients-card .lock-btn {
+    width: 100%;
   }
 
   .list {

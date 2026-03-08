@@ -6,7 +6,6 @@
   <div *ngIf="!isLoading" class="ledger-content">
     <!-- Header -->
     <div class="ledger-header">
-      <div class="header-tag">Voucher Entry</div>
       <h2>Create Gold Voucher</h2>
       <p class="subtitle">Enter transaction details and items</p>
     </div>
@@ -34,7 +33,9 @@
           </mat-select>
         </mat-form-field>
       </mat-card-content>
-    </mat-card>`r`n`r`n    <div [formGroup]="voucherForm">
+    </mat-card>
+
+    <div [formGroup]="voucherForm">
       <!-- Voucher Info -->
       <mat-card class="voucher-info-card">
         <mat-card-header>

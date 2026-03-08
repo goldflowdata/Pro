@@ -61,6 +61,16 @@ export class MasterComponent implements OnInit {
     await this.loadClients();
   }
 
+  lockMaster(): void {
+    this.isUnlocked = false;
+    this.passphrase = '';
+    this.newClientName = '';
+    this.clients = [];
+    this.isLoading = false;
+    this.isSaving = false;
+    this.cdr.detectChanges();
+  }
+
   async loadClients(): Promise<void> {
     const session = this.sessionService.getSession();
     if (!session || session.role !== 'customer') {

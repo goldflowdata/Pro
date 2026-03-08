@@ -1,7 +1,6 @@
 <div class="master-container">
   <mat-card *ngIf="!isUnlocked" class="unlock-card">
     <mat-card-content>
-      <div class="lock-icon">LOCK</div>
       <div class="title">MASTER PASSPHRASE</div>
 
       <mat-form-field appearance="outline" class="full-width">
@@ -17,6 +16,18 @@
 
   <mat-card *ngIf="isUnlocked" class="clients-card">
     <mat-card-content>
+      <div class="master-topbar">
+        <div class="master-title">Master Clients</div>
+        <button
+          mat-raised-button
+          class="lock-btn"
+          (click)="lockMaster()"
+          (keydown.enter)="lockMaster()"
+        >
+          Lock Master
+        </button>
+      </div>
+
       <div class="add-row">
         <mat-form-field appearance="outline" class="name-field">
           <mat-label>Client Name</mat-label>
