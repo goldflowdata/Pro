@@ -120,6 +120,16 @@
 
 }
 
+.password-toggle-btn {
+  color: var(--gray-700) !important;
+}
+
+.password-eye-icon {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
 // Login Button - Submit button styling
 .login-button {
   padding: 12px 24px;
