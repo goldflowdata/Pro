@@ -124,6 +124,12 @@
       background: var(--light-bg);
       border-bottom: 2px solid var(--gray-200);
       padding-left: 24px;
+      overflow-x: auto;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
 
       @media (max-width: 768px) {
         padding-left: 16px;
@@ -208,7 +214,8 @@
     }
 
     ::ng-deep .mat-mdc-tab-labels .mat-mdc-tab {
-      min-width: 88px;
+      min-width: 0 !important;
+      flex: 1 1 0;
       padding: 0 8px;
       height: 52px;
     }

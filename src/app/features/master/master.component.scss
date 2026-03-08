@@ -115,8 +115,31 @@ mat-card {
 }
 
 @media (max-width: 640px) {
+  .master-container {
+    max-width: 100%;
+  }
+
   .clients-card .add-row {
     grid-template-columns: 1fr;
+  }
+
+  .list {
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .row {
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+  }
+
+  .client-name {
+    grid-column: 1 / -1;
+  }
+
+  .stock {
+    min-width: 96px;
+    font-size: 1rem;
   }
 }
 
