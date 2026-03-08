@@ -30,36 +30,61 @@
 
 // Ledger Header
 .ledger-header {
-  margin-bottom: 32px;
+  margin-bottom: 28px;
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
-  gap: 16px;
+  gap: 8px;
+  padding: 4px 2px 0;
+
+  .header-tag {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #cfd8e3;
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #4f5d75;
+    background: #f7f9fc;
+  }
 
   h2 {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 28px;
-    color: var(--primary);
+    font-size: 36px;
+    line-height: 1.1;
+    letter-spacing: 0.2px;
+    color: #f5aa0a;
     margin: 0;
-
-    mat-icon {
-      font-size: 32px;
-      width: 32px;
-      height: 32px;
-      color: var(--accent);
-    }
+    font-weight: 800;
   }
 
   .subtitle {
     color: var(--gray-600);
-    font-size: 14px;
-    margin: 4px 0 0 0;
+    font-size: 18px;
+    line-height: 1.35;
+    margin: 0;
+    max-width: 720px;
+  }
+
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 30px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+    }
   }
 
   @media (max-width: 480px) {
     h2 {
-      font-size: 20px;
+      font-size: 24px;
+    }
+
+    .subtitle {
+      font-size: 14px;
     }
   }
 }

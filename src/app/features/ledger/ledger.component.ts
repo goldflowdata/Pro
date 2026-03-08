@@ -110,7 +110,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   private initializeForm(): void {
     this.voucherForm = this.fb.group({
-      date: [new Date().toISOString().split('T')[0]],
+      date: [new Date()],
       description: [''],
       stamp: [''],
       gross: [''],
@@ -178,7 +178,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.calculateClosingBalance();
   }
 
-  onClientSelection(clientId: string): void {
+  onClientSelection(clientId: string | null): void {
     if (!clientId) {
       this.selectedClient = null;
       this.selectedClientId = null;
@@ -191,6 +191,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
     if (client) {
       this.selectClientOption(client);
     }
+  }
+
+  private formatDateForDb(value: unknown): string {
+    if (value instanceof Date && !isNaN(value.getTime())) {
+      return value.toISOString().split('T')[0];
+    }
+    if (typeof value === 'string' && value.trim()) {
+      return value;
+    }
+    return new Date().toISOString().split('T')[0];
   }
 
   addItem(): void {
@@ -312,7 +322,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
       const voucher = {
         customerId: session.id,
-        date: this.voucherForm.get('date')?.value || new Date().toISOString().split('T')[0],
+        date: this.formatDateForDb(this.voucherForm.get('date')?.value),
         items: this.items,
         openingBalance: this.totals.openingBalance,
         closingBalance: this.totals.closingBalance,
@@ -355,7 +365,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   private resetForm(): void {
     this.items = [];
     this.voucherForm.reset({
-      date: new Date().toISOString().split('T')[0],
+      date: new Date(),
       description: '',
       stamp: '',
       gross: '',

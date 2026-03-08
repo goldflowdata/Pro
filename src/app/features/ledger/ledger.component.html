@@ -6,10 +6,8 @@
   <div *ngIf="!isLoading" class="ledger-content">
     <!-- Header -->
     <div class="ledger-header">
-      <h2>
-        <span>•</span>
-        Create Gold Voucher
-      </h2>
+      <div class="header-tag">Voucher Entry</div>
+      <h2>Create Gold Voucher</h2>
       <p class="subtitle">Enter transaction details and items</p>
     </div>
 
@@ -36,7 +34,7 @@
           </mat-select>
         </mat-form-field>
       </mat-card-content>
-    </mat-card><div [formGroup]="voucherForm">
+    </mat-card>`r`n`r`n    <div [formGroup]="voucherForm">
       <!-- Voucher Info -->
       <mat-card class="voucher-info-card">
         <mat-card-header>
@@ -50,10 +48,11 @@
               <mat-label>Transaction Date</mat-label>
               <input
                 matInput
-                type="date"
                 formControlName="date"
+                [matDatepicker]="voucherDatePicker"
               />
-              <span matSuffix class="calendar-suffix">📅</span>
+              <mat-datepicker-toggle matSuffix [for]="voucherDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #voucherDatePicker></mat-datepicker>
             </mat-form-field>
           </div>
         </mat-card-content>
@@ -360,5 +359,8 @@
     </div>
   </div>
 </div>
+
+
+
 
 
